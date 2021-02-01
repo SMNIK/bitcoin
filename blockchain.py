@@ -10,7 +10,7 @@ import hashlib
 import sys
 from time import time
 from uuid import uuid4
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 
 class Blockchain(object):
@@ -43,7 +43,7 @@ class Blockchain(object):
     @property
     def last_block(self):
         ''' return last block '''
-        pass
+        return self.chain[-1]
 
     @staticmethod
     def valid_proof(last_proof, proof):
@@ -72,13 +72,24 @@ def mine():
     ''' this will mine one block 
     and will add it to the chain
     '''
-    return "I will mine!"
+    last_block = blockchain.last_block
+    last_proof = last_block['proof']
+    proof = blockchain.proof_of_work(last_proof)
+    blockchain.new_trx(sender="0", recipient=node_id, amount=1)
+    previous_hash = blockchain.hash(last_block)
+    block blockchain.new_block(proof, previous_hash)
+    res = {'message': 'new block created',
+           'index': block['index'], 'trxs': block['trxs'], 'proof': block['proof'], 'previous_hash': block['previous_hash']}
 
 
 @app.route('/trxs/new', methods=['POST'])
 def new_trx():
-    '''will add a new trx '''
-    return 'a new trx added'
+    '''will add a new trx by getting sender, recipient, amount '''
+    values = request.get_json()
+    print(values)
+    blockchain.new_trx(values['sender'], values['recipient'], values['amount'])
+    res = {'message': f'will be added to block {this_block}'}
+    return jsonify(res), 201
 
 
 @app.route('/chain')
