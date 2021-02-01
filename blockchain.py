@@ -10,15 +10,15 @@ class Blockchain(object):
     ''' define a block chain on one machine '''
     def __init__(self):
         self.chain = []
-        self.current_trx = []
+        self.current_trxs = []
         
     def new_block(self):
         ''' creat a new block '''
-        pass
+        block = {'index': len(self.chain) + 1, }
     
     def new_trx(self, sender, recipient, amount):
-        ''' add a new trx to the mempool '''
-        self.current_trx.append({'sender': sender, 'recipient': recipient, 'amount': amount})
+        ''' add a new trxs to the mempool '''
+        self.current_trxs.append({'sender': sender, 'recipient': recipient, 'amount': amount})
     
     @staticmethod
     def hash(block):
