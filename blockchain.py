@@ -5,10 +5,6 @@ Created on Sun Jan 31 16:33:10 2021
 @author: masou
 """
 
-import json
-import hashlib
-from time import time
-
 
 import json
 import hashlib
@@ -46,3 +42,22 @@ class Blockchain(object):
     def last_block(self):
         ''' return last block '''
         pass
+    
+    def proof_of_work(self, last_proof):
+        ''' shows that the work is done'''
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
