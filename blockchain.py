@@ -5,10 +5,12 @@ Created on Sun Jan 31 16:33:10 2021
 @author: masou
 """
 
-
 import json
 import hashlib
+import sys
 from time import time
+from uuid import uuid4
+from flask import Flask, jsonify
 
 
 class Blockchain(object):
@@ -42,22 +44,49 @@ class Blockchain(object):
     def last_block(self):
         ''' return last block '''
         pass
-    
+
+    @staticmethod
+    def valid_proof(last_proof, proof):
+        ''' checks if this proof is fine or not '''
+        this_proof = f'{proof}{last_proof}'.encode()
+        this_proof_hash = hashlib.sha256(this_proof).hexdigest()
+        return this_proof_hash[:4] == '0000'
+
     def proof_of_work(self, last_proof):
         ''' shows that the work is done'''
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+        proof = 0
+        while self.valid_proof(last_proff, proof) is False:
+            proof += 1
+        return proof
 
 
+app = Flask(__name__)
+
+node_id = str(uuid4())
+
+blockchain = Blockchain()
+
+
+@app.route('/mine')
+def mine():
+    ''' this will mine one block 
+    and will add it to the chain
+    '''
+    return "I will mine!"
+
+
+@app.route('/trxs/new', methods=['POST'])
+def new_trx():
+    '''will add a new trx '''
+    return 'a new trx added'
+
+
+@app.route('/chain')
+def full_chain():
+    ''' return the full chain'''
+    res = {'chain': blockchain.chain, 'length': len(blockchain.chain)}
+    return jsonify(res), 200
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=sys.argv[1])
